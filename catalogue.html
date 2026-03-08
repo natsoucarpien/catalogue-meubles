@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catalogue de meubles</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: #f5f2ee;
+      color: #2c2c2c;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: #2c2c2c;
+      color: #f5f2ee;
+      text-align: center;
+      padding: 48px 24px 40px;
+    }
+    header h1 {
+      font-size: 2rem;
+      font-weight: normal;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    header p {
+      margin-top: 10px;
+      font-size: 0.95rem;
+      color: #aaa;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── MAIN ── */
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 56px;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: #fff;
+      border: 1px solid #e0dbd4;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+    }
+
+    /* Photos à gauche */
+    .card-photos {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      background: #e0dbd4;
+    }
+    .card-photos img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      display: block;
+    }
+    .card-photos img:only-child {
+      height: 100%;
+      min-height: 320px;
+    }
+
+    /* Infos à droite */
+    .card-info {
+      padding: 36px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .card-info h2 {
+      font-size: 1.35rem;
+      font-weight: normal;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border-bottom: 1px solid #e0dbd4;
+      padding-bottom: 14px;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: #2c2c2c;
+      color: #f5f2ee;
+      padding: 3px 10px;
+      margin-top: -10px;
+      align-self: flex-start;
+    }
+    .badge.good { background: #5a7a5a; }
+
+    /* Dimensions */
+    .dimensions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .dim {
+      text-align: center;
+      background: #f5f2ee;
+      border: 1px solid #e0dbd4;
+      padding: 10px 16px;
+      min-width: 72px;
+    }
+    .dim .val {
+      font-size: 1.2rem;
+      font-weight: bold;
+      display: block;
+      color: #2c2c2c;
+    }
+    .dim .lbl {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #888;
+    }
+
+    /* Description */
+    .description ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .description ul li::before {
+      content: "—";
+      margin-right: 8px;
+      color: #aaa;
+    }
+    .description ul li {
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #aaa;
+      margin-bottom: 6px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 0.8rem;
+      color: #aaa;
+      border-top: 1px solid #e0dbd4;
+    }
+
+    /* Photos 3 — grande en haut, 2 petites en bas */
+    .card-photos-3 {
+      display: grid;
+      grid-template-rows: 1fr auto;
+      gap: 2px;
+      background: #e0dbd4;
+    }
+    .card-photos-3 .main-photo {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      display: block;
+    }
+    .card-photos-3 .thumb-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+    }
+    .card-photos-3 .thumb-row img {
+      width: 100%;
+      height: 130px;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Provenance / note encadrée */
+    .note {
+      background: #f5f2ee;
+      border-left: 3px solid #2c2c2c;
+      padding: 10px 14px;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    /* ── PRINT ── */
+    @media print {
+      body { background: #fff; }
+      .card { break-inside: avoid; page-break-inside: avoid; }
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 640px) {
+      .card { grid-template-columns: 1fr; }
+      .card-photos img { height: 240px; }
+      .card-photos img:only-child { min-height: 240px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Catalogue de meubles</h1>
+  <p>Vente de particulier &mdash; À saisir sur place</p>
+</header>
+
+<main>
+
+  <!-- ══════════════════════════════════════════
+       MEUBLE 1 — Bibliothèque murale
+  ══════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-photos">
+      <img src="bibliothèque murale/bibliothèque murale 1.jpg" alt="Bibliothèque murale - vue 1">
+      <img src="bibliothèque murale/bibliothèque murale 2.jpg" alt="Bibliothèque murale - vue 2">
+    </div>
+    <div class="card-info">
+      <h2>Bibliothèque modulaire murale</h2>
+      <span class="badge">Années 60–70 · Mid-Century Modern</span>
+
+      <div>
+        <div class="section-label">Dimensions</div>
+        <div class="dimensions">
+          <div class="dim"><span class="val">270</span><span class="lbl">Largeur cm</span></div>
+          <div class="dim"><span class="val">175</span><span class="lbl">Hauteur cm</span></div>
+          <div class="dim"><span class="val">43</span><span class="lbl">Profondeur cm</span></div>
+        </div>
+      </div>
+
+      <div class="description">
+        <div class="section-label">Caractéristiques</div>
+        <ul>
+          <li>Placage teck ou acajou</li>
+          <li>Structure en métal</li>
+          <li>Portes coulissantes en verre</li>
+          <li>Système d'éclairage intégré</li>
+          <li>Niche dédiée chaîne hi-fi</li>
+          <li>Tiroirs rangement documents / vinyles</li>
+          <li>Bureau abattant</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       MEUBLE 2 — Fauteuil électrique
+  ══════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-photos">
+      <img src="fauteuil électrique/fauteuil électrique.jpg" alt="Fauteuil électrique">
+    </div>
+    <div class="card-info">
+      <h2>Fauteuil électrique releveur</h2>
+      <span class="badge good">État quasi-neuf</span>
+
+      <div>
+        <div class="section-label">Dimensions</div>
+        <div class="dimensions">
+          <div class="dim"><span class="val">103</span><span class="lbl">Largeur cm</span></div>
+          <div class="dim"><span class="val">97</span><span class="lbl">Hauteur cm</span></div>
+          <div class="dim"><span class="val">92</span><span class="lbl">Profondeur cm</span></div>
+        </div>
+      </div>
+
+      <div class="description">
+        <div class="section-label">Caractéristiques</div>
+        <ul>
+          <li>Commande électrique</li>
+          <li>Nombreuses positions de confort</li>
+          <li>Revêtement tissu gris clair</li>
+          <li>Très confortable</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       MEUBLE 3 — Chaises Série 7 Fritz Hansen
+  ══════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-photos-3">
+      <img class="main-photo" src="7 chaises FH jacobsen/7 chaises.jpg" alt="Lot de 7 chaises Série 7">
+      <div class="thumb-row">
+        <img src="7 chaises FH jacobsen/20260221_112107.jpg" alt="Détail chaises">
+        <img src="7 chaises FH jacobsen/plaque marque FH.jpg" alt="Étiquette Fritz Hansen d'authenticité">
+      </div>
+    </div>
+    <div class="card-info">
+      <h2>Chaises « Série 7 » — Lot de 7</h2>
+      <span class="badge">Design Arne Jacobsen · 1963</span>
+
+      <div class="description">
+        <div class="section-label">Caractéristiques</div>
+        <ul>
+          <li>Modèle 3107 — Série 7™</li>
+          <li>Fabricant : Fritz Hansen, Danemark</li>
+          <li>Assise en contreplaqué moulé sous pression</li>
+          <li>Piétement acier chromé</li>
+          <li>Finition noire</li>
+          <li>Bon état général, patine vintage — quelques traces d'usure et griffures sur certaines</li>
+          <li>8<sup>e</sup> chaise transformée en tabouret — offerte avec le lot</li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="section-label">Provenance &amp; authenticité</div>
+        <div class="note">
+          Étiquette d'origine sous l'assise : logo <strong>FH</strong> · <em>Made in Denmark</em> · <strong>0763</strong> (juillet 1963) · label « Danish Furniture Makers' Control ».
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       MEUBLE 4 — Commode Louis-Philippe
+  ══════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-photos">
+      <img src="Commode à quatre tiroirs style Louis-Philippe/commode 4 tiroirs louis-philippe.jpg" alt="Commode Louis-Philippe 4 tiroirs">
+    </div>
+    <div class="card-info">
+      <h2>Commode quatre tiroirs style Louis-Philippe</h2>
+      <span class="badge">Antiquité · XIXe siècle</span>
+
+      <div>
+        <div class="section-label">Dimensions</div>
+        <div class="dimensions">
+          <div class="dim"><span class="val">101</span><span class="lbl">Largeur cm</span></div>
+          <div class="dim"><span class="val">93</span><span class="lbl">Hauteur cm</span></div>
+          <div class="dim"><span class="val">48</span><span class="lbl">Profondeur cm</span></div>
+        </div>
+      </div>
+
+      <div class="description">
+        <div class="section-label">Caractéristiques</div>
+        <ul>
+          <li>Placage de bois précieux flammé (acajou ou noyer) sur structure bois massif</li>
+          <li>Quatre tiroirs dont un tiroir haut en bandeau</li>
+          <li>Entrées de serrure en laiton doré</li>
+          <li>Pieds carrés caractéristiques du style Louis-Philippe</li>
+          <li>Bel aspect général — jolie patine du vernis</li>
+        </ul>
+      </div>
+
+      <div class="note">
+        Photos complémentaires à venir : intérieur d'un tiroir · identification précise du bois.
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       MEUBLE 5 — Commode sauteuse Louis XV
+  ══════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-photos">
+      <img src="Commode sauteuse à trois tiroirs/commode sauteuse.jpg" alt="Commode sauteuse Louis XV 3 tiroirs">
+    </div>
+    <div class="card-info">
+      <h2>Commode sauteuse trois tiroirs style Louis XV</h2>
+      <span class="badge">Antiquité · Style Louis XV</span>
+
+      <div>
+        <div class="section-label">Dimensions</div>
+        <div class="dimensions">
+          <div class="dim"><span class="val">110</span><span class="lbl">Largeur cm</span></div>
+          <div class="dim"><span class="val">85</span><span class="lbl">Hauteur cm</span></div>
+          <div class="dim"><span class="val">54</span><span class="lbl">Profondeur cm</span></div>
+        </div>
+      </div>
+
+      <div class="description">
+        <div class="section-label">Caractéristiques</div>
+        <ul>
+          <li>Bois massif et placage — probablement merisier ou noyer</li>
+          <li>Façade bombée (galbe caractéristique du style Louis XV)</li>
+          <li>Trois tiroirs avec poignées en bronze ciselé</li>
+          <li>Panneaux latéraux sculptés</li>
+          <li>Très bon état de conservation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       MEUBLE 6 — Table guéridon circulaire
+  ══════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-photos">
+      <img src="table ronde bois/table ronde bois.jpg" alt="Table guéridon circulaire">
+    </div>
+    <div class="card-info">
+      <h2>Table guéridon circulaire</h2>
+      <span class="badge">Antiquité · Style Louis-Philippe</span>
+
+      <div>
+        <div class="section-label">Dimensions</div>
+        <div class="dimensions">
+          <div class="dim"><span class="val">90</span><span class="lbl">Diamètre cm</span></div>
+          <div class="dim"><span class="val">73</span><span class="lbl">Hauteur cm</span></div>
+        </div>
+      </div>
+
+      <div class="description">
+        <div class="section-label">Caractéristiques</div>
+        <ul>
+          <li>Bois massif — probablement noyer ou merisier</li>
+          <li>Plateau circulaire</li>
+          <li>Pied central en colonne tournée</li>
+          <li>Base trépied à pieds galbés</li>
+          <li>Bel état d'usage — quelques marques de vie sur le plateau</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       MEUBLE 7 — Vitrine bibliothèque basse noire
+  ══════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-photos">
+      <img src="Vitrine de bibliothèque basse noire/IMG-20260307-WA0009.jpg" alt="Vitrine bibliothèque basse noire">
+    </div>
+    <div class="card-info">
+      <h2>Vitrine bibliothèque basse</h2>
+      <span class="badge good">Très bon état</span>
+
+      <div>
+        <div class="section-label">Dimensions</div>
+        <div class="dimensions">
+          <div class="dim"><span class="val">78</span><span class="lbl">Largeur cm</span></div>
+          <div class="dim"><span class="val">99</span><span class="lbl">Hauteur cm</span></div>
+          <div class="dim"><span class="val">18</span><span class="lbl">Profondeur cm</span></div>
+        </div>
+      </div>
+
+      <div class="description">
+        <div class="section-label">Caractéristiques</div>
+        <ul>
+          <li>Finition mélaminée noir-brun</li>
+          <li>Portes coulissantes en verre trempé</li>
+          <li>3 étagères réglables par côté</li>
+          <li>Structure MDF / bois aggloméré</li>
+          <li>Très bon état général</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       MEUBLE 8 — Tabourets Dot Fritz Hansen
+  ══════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-photos-3">
+      <img class="main-photo" src="tabourets FH jacobsen/20260307_232215.webp" alt="Tabouret Dot Fritz Hansen - brun">
+      <div class="thumb-row">
+        <img src="tabourets FH jacobsen/20260307_232222.webp" alt="Tabouret Dot - vue de dessus">
+        <img src="tabourets FH jacobsen/20260307_232348.webp" alt="Tabouret Dot noir - marque Fritz Hansen">
+      </div>
+    </div>
+    <div class="card-info">
+      <h2>Tabourets « Dot » — Lot de 2</h2>
+      <span class="badge">Design Arne Jacobsen · Fritz Hansen</span>
+
+      <div class="description">
+        <div class="section-label">Caractéristiques</div>
+        <ul>
+          <li>Modèle « Dot » (3170) — Fritz Hansen, Danemark</li>
+          <li>Assise ronde en contreplaqué moulé</li>
+          <li>Piétement 3 pieds en acier chromé</li>
+          <li>1 tabouret noir — bon état</li>
+          <li>1 tabouret brun (teck) — état moins bon</li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="section-label">Provenance &amp; authenticité</div>
+        <div class="note">
+          Marque <strong>Fritz Hansen</strong> visible sous l'assise du tabouret noir.
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       MEUBLE 9 — Meuble rangement scandinave
+  ══════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-photos">
+      <img src="meuble rangement scandinave/IMG-20260307-WA0010.jpg" alt="Meuble rangement scandinave années 60">
+    </div>
+    <div class="card-info">
+      <h2>Meuble buffet / bibliothèque scandinave</h2>
+      <span class="badge">Années 60 · Mid-Century Scandinave</span>
+
+      <div>
+        <div class="section-label">Dimensions</div>
+        <div class="dimensions">
+          <div class="dim"><span class="val">73</span><span class="lbl">Largeur cm</span></div>
+          <div class="dim"><span class="val">130</span><span class="lbl">Hauteur cm</span></div>
+          <div class="dim"><span class="val">35</span><span class="lbl">Profondeur cm</span></div>
+        </div>
+      </div>
+
+      <div class="description">
+        <div class="section-label">Caractéristiques</div>
+        <ul>
+          <li>Placage bois clair (teck ou chêne)</li>
+          <li>Partie haute : 2 étagères avec façade vitrée coulissante</li>
+          <li>Partie basse : buffet 2 portes avec poignées métal</li>
+          <li>Pieds fins en métal laqué noir</li>
+          <li>Format compact</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       MEUBLE 10 — Paire de fauteuils de salon
+  ══════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-photos">
+      <img src="paire de fauteuils de salon/IMG-20260307-WA0011.jpg" alt="Paire de fauteuils style Florence Knoll">
+    </div>
+    <div class="card-info">
+      <h2>Paire de fauteuils de salon</h2>
+      <span class="badge">Années 70 · Style Florence Knoll</span>
+
+      <div>
+        <div class="section-label">Dimensions (par fauteuil)</div>
+        <div class="dimensions">
+          <div class="dim"><span class="val">76</span><span class="lbl">Largeur cm</span></div>
+          <div class="dim"><span class="val">76</span><span class="lbl">Hauteur cm</span></div>
+          <div class="dim"><span class="val">76</span><span class="lbl">Profondeur cm</span></div>
+        </div>
+      </div>
+
+      <div class="description">
+        <div class="section-label">Caractéristiques</div>
+        <ul>
+          <li>Vendu à la paire</li>
+          <li>Style Florence Knoll — lignes cubiques épurées</li>
+          <li>Revêtement tissu gris anthracite résistant</li>
+          <li>Dossier capitonné (boutons)</li>
+          <li>Pieds en acier chromé</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Catalogue généré le 8 mars 2026
+</footer>
+
+</body>
+</html>
