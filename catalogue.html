@@ -196,6 +196,62 @@
       color: #555;
     }
 
+    /* ── LIGHTBOX ── */
+    .card-photos img,
+    .card-photos-3 img {
+      cursor: zoom-in;
+    }
+    #lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.88);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+    }
+    #lightbox.open {
+      display: flex;
+    }
+    #lightbox img {
+      max-width: 92vw;
+      max-height: 92vh;
+      object-fit: contain;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+    }
+
+    /* ── VENDU ── */
+    .card.vendu {
+      filter: grayscale(50%);
+      opacity: 0.8;
+    }
+    .card.vendu .card-photos,
+    .card.vendu .card-photos-3 {
+      position: relative;
+    }
+    .card.vendu .card-photos::after,
+    .card.vendu .card-photos-3::after {
+      content: "VENDU";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-22deg);
+      font-family: 'Arial Black', 'Arial', sans-serif;
+      font-size: 3rem;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      color: #cc1111;
+      border: 6px solid #cc1111;
+      padding: 8px 22px;
+      opacity: 0.9;
+      pointer-events: none;
+      z-index: 10;
+      white-space: nowrap;
+      border-radius: 4px;
+      text-shadow: 1px 1px 0 rgba(0,0,0,0.15);
+    }
+
     /* ── PRINT ── */
     @media print {
       body { background: #fff; }
@@ -293,7 +349,7 @@
   <!-- ══════════════════════════════════════════
        OBJET — Lampe Pipistrello Martinelli Luce
   ══════════════════════════════════════════ -->
-  <div class="card">
+  <div class="card vendu">
     <div class="card-photos-3">
       <img class="main-photo" src="Lampe pipistrello martinelli luce/IMG-20260307-WA0014.jpg" alt="Lampe Pipistrello allumée">
       <div class="thumb-row">
@@ -328,6 +384,43 @@
 
 
   <!-- ══════════════════════════════════════════
+       MEUBLE — Bureau Fritz Hansen
+  ══════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-photos-3">
+      <img class="main-photo" src="bureau Fritz Hansen/20260309_165534.jpg" alt="Bureau Fritz Hansen — plateau laqué blanc, vue de face">
+      <div class="thumb-row">
+        <img src="bureau Fritz Hansen/20260309_165634.jpg" alt="Bureau Fritz Hansen — vue de 3/4">
+        <img src="bureau Fritz Hansen/20260309_165556.jpg" alt="Étiquette Fritz Hansen — modèle 7111, Made in Denmark">
+      </div>
+    </div>
+    <div class="card-info">
+      <h2>Bureau — Fritz Hansen</h2>
+      <span class="badge">Design Arne Jacobsen · Fritz Hansen</span>
+
+      <div>
+        <div class="section-label">Dimensions</div>
+        <div class="dimensions">
+          <div class="dim"><span class="val">160</span><span class="lbl">Largeur cm</span></div>
+          <div class="dim"><span class="val">80</span><span class="lbl">Profondeur cm</span></div>
+        </div>
+      </div>
+
+      <div class="description">
+        <div class="section-label">Caractéristiques</div>
+        <ul>
+          <li>Fabricant : <strong>Fritz Hansen</strong>, Danemark — modèle 7111</li>
+          <li>Édition originale avec étiquette d'authenticité</li>
+          <li>Plateau laqué blanc, chant en bois</li>
+          <li>Piétement en T inversé, structure métal</li>
+          <li>Très bon état</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
        MEUBLE 3 — Chaises Série 7 Fritz Hansen
   ══════════════════════════════════════════ -->
   <div class="card">
@@ -339,7 +432,7 @@
       </div>
     </div>
     <div class="card-info">
-      <h2>Chaises « Série 7 » — Lot de 7</h2>
+      <h2>Chaises « Série 7 » — Lot de 3</h2>
       <span class="badge">Design Arne Jacobsen · 1963</span>
 
       <div class="description">
@@ -351,8 +444,38 @@
           <li>Piétement acier chromé</li>
           <li>Finition noire</li>
           <li>Bon état général, patine vintage — quelques traces d'usure et griffures sur certaines</li>
-          <li>8<sup>e</sup> chaise transformée en tabouret — offerte avec le lot</li>
+          <li>3 chaises disponibles — légèrement plus petites que les 4 vendues</li>
           <li>Étiquette d'origine sous l'assise : <strong>FH</strong> · <em>Made in Denmark</em> · <strong>0763</strong> (juillet 1963)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       MEUBLE 8 — Tabourets Dot Fritz Hansen
+  ══════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-photos-3">
+      <img class="main-photo" src="tabourets FH jacobsen/20260307_232215.webp" alt="Tabouret Dot Fritz Hansen - brun">
+      <div class="thumb-row">
+        <img src="tabourets FH jacobsen/20260307_232222.webp" alt="Tabouret Dot - vue de dessus">
+        <img src="tabourets FH jacobsen/20260307_232348.webp" alt="Tabouret Dot noir - marque Fritz Hansen">
+      </div>
+    </div>
+    <div class="card-info">
+      <h2>Tabourets « Dot » — Lot de 2</h2>
+      <span class="badge">Design Arne Jacobsen · Fritz Hansen</span>
+
+      <div class="description">
+        <div class="section-label">Caractéristiques</div>
+        <ul>
+          <li>Modèle « Dot » (3170) — Fritz Hansen, Danemark</li>
+          <li>Assise ronde en contreplaqué moulé</li>
+          <li>Piétement 3 pieds en acier chromé</li>
+          <li>1 tabouret noir — bon état</li>
+          <li>1 tabouret brun (teck) — état moins bon</li>
+          <li>Marque <strong>Fritz Hansen</strong> visible sous l'assise du tabouret noir</li>
         </ul>
       </div>
     </div>
@@ -362,7 +485,7 @@
   <!-- ══════════════════════════════════════════
        MEUBLE 4 — Commode Louis-Philippe
   ══════════════════════════════════════════ -->
-  <div class="card">
+  <div class="card vendu">
     <div class="card-photos">
       <img src="Commode à quatre tiroirs style Louis-Philippe/commode 4 tiroirs louis-philippe.jpg" alt="Commode Louis-Philippe 4 tiroirs">
     </div>
@@ -467,7 +590,7 @@
   <!-- ══════════════════════════════════════════
        MEUBLE 7 — Vitrine bibliothèque basse noire
   ══════════════════════════════════════════ -->
-  <div class="card">
+  <div class="card vendu">
     <div class="card-photos">
       <img src="Vitrine de bibliothèque basse noire/IMG-20260307-WA0009.jpg" alt="Vitrine bibliothèque basse noire">
     </div>
@@ -492,36 +615,6 @@
           <li>3 étagères réglables par côté</li>
           <li>Structure MDF / bois aggloméré</li>
           <li>Très bon état général</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- ══════════════════════════════════════════
-       MEUBLE 8 — Tabourets Dot Fritz Hansen
-  ══════════════════════════════════════════ -->
-  <div class="card">
-    <div class="card-photos-3">
-      <img class="main-photo" src="tabourets FH jacobsen/20260307_232215.webp" alt="Tabouret Dot Fritz Hansen - brun">
-      <div class="thumb-row">
-        <img src="tabourets FH jacobsen/20260307_232222.webp" alt="Tabouret Dot - vue de dessus">
-        <img src="tabourets FH jacobsen/20260307_232348.webp" alt="Tabouret Dot noir - marque Fritz Hansen">
-      </div>
-    </div>
-    <div class="card-info">
-      <h2>Tabourets « Dot » — Lot de 2</h2>
-      <span class="badge">Design Arne Jacobsen · Fritz Hansen</span>
-
-      <div class="description">
-        <div class="section-label">Caractéristiques</div>
-        <ul>
-          <li>Modèle « Dot » (3170) — Fritz Hansen, Danemark</li>
-          <li>Assise ronde en contreplaqué moulé</li>
-          <li>Piétement 3 pieds en acier chromé</li>
-          <li>1 tabouret noir — bon état</li>
-          <li>1 tabouret brun (teck) — état moins bon</li>
-          <li>Marque <strong>Fritz Hansen</strong> visible sous l'assise du tabouret noir</li>
         </ul>
       </div>
     </div>
@@ -762,38 +855,6 @@
 
 
   <!-- ══════════════════════════════════════════
-       MEUBLE — Bureau moderniste
-  ══════════════════════════════════════════ -->
-  <div class="card">
-    <div class="card-photos">
-      <img src="bureau moderne/bureau.png" alt="Bureau moderniste style Haller/Knoll">
-    </div>
-    <div class="card-info">
-      <h2>Bureau moderniste style Haller / Knoll</h2>
-      <span class="badge">Design Moderniste</span>
-
-      <div>
-        <div class="section-label">Dimensions</div>
-        <div class="dimensions">
-          <div class="dim"><span class="val">160</span><span class="lbl">Largeur cm</span></div>
-          <div class="dim"><span class="val">80</span><span class="lbl">Profondeur cm</span></div>
-        </div>
-      </div>
-
-      <div class="description">
-        <div class="section-label">Caractéristiques</div>
-        <ul>
-          <li>Plateau laqué blanc</li>
-          <li>Structure de piétement en métal</li>
-          <li>Lignes épurées, inspirées du système Haller / Knoll</li>
-          <li>Marque non identifiée</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- ══════════════════════════════════════════
        MEUBLE — Canapé en cuir
   ══════════════════════════════════════════ -->
   <div class="card">
@@ -1001,12 +1062,16 @@
        MEUBLE — Clic-clac canapé-lit
   ══════════════════════════════════════════ -->
   <div class="card">
-    <div class="card-photos">
-      <img src="clic-clac canapé-lit/IMG-20260308-WA0002.jpg" alt="Canapé-lit clic-clac rouge">
+    <div class="card-photos-3">
+      <img class="main-photo" src="clic-clac canapé-lit/IMG-20260308-WA0002.jpg" alt="Canapé-lit clic-clac Bultex — replié, tissu rouge">
+      <div class="thumb-row">
+        <img src="clic-clac canapé-lit/IMG-20260308-WA0006.jpg" alt="Canapé-lit Bultex — déplié, matelas beige">
+        <img src="clic-clac canapé-lit/IMG-20260308-WA0005.jpg" alt="Étiquette Bultex SM">
+      </div>
     </div>
     <div class="card-info">
-      <h2>Canapé-lit clic-clac</h2>
-      <span class="badge">Convertible</span>
+      <h2>Canapé-lit clic-clac — Bultex</h2>
+      <span class="badge">Convertible · Bultex</span>
 
       <div>
         <div class="section-label">Dimensions (déplié)</div>
@@ -1019,7 +1084,8 @@
       <div class="description">
         <div class="section-label">Caractéristiques</div>
         <ul>
-          <li>Revêtement tissu rouge</li>
+          <li>Fabricant : <strong>Bultex</strong> SM</li>
+          <li>Revêtement tissu rouge, matelas beige/gris</li>
           <li>Mécanisme clic-clac</li>
           <li>Couchage 150 × 190 cm</li>
         </ul>
@@ -1032,6 +1098,29 @@
 <footer>
   Catalogue généré le 8 mars 2026
 </footer>
+
+<div id="lightbox">
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+  const lightbox = document.getElementById('lightbox');
+  const lbImg    = document.getElementById('lightbox-img');
+
+  document.querySelectorAll('.card-photos img, .card-photos-3 img').forEach(img => {
+    img.addEventListener('click', () => {
+      lbImg.src = img.src;
+      lbImg.alt = img.alt;
+      lightbox.classList.add('open');
+    });
+  });
+
+  lightbox.addEventListener('click', () => lightbox.classList.remove('open'));
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') lightbox.classList.remove('open');
+  });
+</script>
 
 </body>
 </html>
