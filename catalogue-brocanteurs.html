@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sélection — Vente de particulier</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: #f5f2ee;
+      color: #2c2c2c;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: #2c2c2c;
+      color: #f5f2ee;
+      text-align: center;
+      padding: 48px 24px 40px;
+    }
+    header h1 {
+      font-size: 2rem;
+      font-weight: normal;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    header p {
+      margin-top: 10px;
+      font-size: 0.95rem;
+      color: #aaa;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── MAIN ── */
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 56px;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: #fff;
+      border: 1px solid #e0dbd4;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+    }
+
+    /* Photos à gauche */
+    .card-photos {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      background: #e0dbd4;
+    }
+    .card-photos img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      display: block;
+    }
+    .card-photos img:only-child {
+      height: 100%;
+      min-height: 320px;
+    }
+
+    /* Infos à droite */
+    .card-info {
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .card-info h2 {
+      font-size: 1.2rem;
+      font-weight: normal;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border-bottom: 1px solid #e0dbd4;
+      padding-bottom: 10px;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: #2c2c2c;
+      color: #f5f2ee;
+      padding: 3px 10px;
+      margin-top: -10px;
+      align-self: flex-start;
+    }
+    .badge.good { background: #5a7a5a; }
+
+    /* Dimensions */
+    .dimensions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .dim {
+      text-align: center;
+      background: #f5f2ee;
+      border: 1px solid #e0dbd4;
+      padding: 10px 16px;
+      min-width: 72px;
+    }
+    .dim .val {
+      font-size: 1.2rem;
+      font-weight: bold;
+      display: block;
+      color: #2c2c2c;
+    }
+    .dim .lbl {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #888;
+    }
+
+    /* Description */
+    .description ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .description ul li::before {
+      content: "—";
+      margin-right: 8px;
+      color: #aaa;
+    }
+    .description ul li {
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #aaa;
+      margin-bottom: 6px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 0.8rem;
+      color: #aaa;
+      border-top: 1px solid #e0dbd4;
+    }
+
+    /* Photos 3 — grande en haut, 2 petites en bas */
+    .card-photos-3 {
+      display: grid;
+      grid-template-rows: 1fr auto;
+      gap: 2px;
+      background: #e0dbd4;
+    }
+    .card-photos-3 .main-photo {
+      width: 100%;
+      height: 100%;
+      min-height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .card-photos-3 .thumb-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+    }
+    .card-photos-3 .thumb-row img {
+      width: 100%;
+      height: 130px;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Provenance / note encadrée */
+    .note {
+      background: #f5f2ee;
+      border-left: 3px solid #2c2c2c;
+      padding: 10px 14px;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    /* ── LIGHTBOX ── */
+    .card-photos img,
+    .card-photos-3 img {
+      cursor: zoom-in;
+    }
+    #lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.88);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+    }
+    #lightbox.open {
+      display: flex;
+    }
+    #lightbox img {
+      max-width: 92vw;
+      max-height: 92vh;
+      object-fit: contain;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+    }
+
+    /* ── VENDU ── */
+    .card.vendu {
+      filter: grayscale(50%);
+      opacity: 0.8;
+    }
+    .card.vendu .card-photos,
+    .card.vendu .card-photos-3 {
+      position: relative;
+    }
+    .card.vendu .card-photos::after,
+    .card.vendu .card-photos-3::after {
+      content: "VENDU";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-22deg);
+      font-family: 'Arial Black', 'Arial', sans-serif;
+      font-size: 3rem;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      color: #cc1111;
+      border: 6px solid #cc1111;
+      padding: 8px 22px;
+      opacity: 0.9;
+      pointer-events: none;
+      z-index: 10;
+      white-space: nowrap;
+      border-radius: 4px;
+      text-shadow: 1px 1px 0 rgba(0,0,0,0.15);
+    }
+
+    /* ── PRINT ── */
+    @media print {
+      body { background: #fff; }
+      .card { break-inside: avoid; page-break-inside: avoid; }
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 640px) {
+      .card { grid-template-columns: 1fr; }
+      .card-photos img { height: 240px; }
+      .card-photos img:only-child { min-height: 240px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Sélection — Vente de particulier</h1>
+  <p>À saisir sur place &mdash; Rue de las Sorbes, Montpellier</p>
+</header>
+
+<main>
+
+  <!-- ══════════════════════════════════════════
+       MEUBLE 1 — Grande table de réfectoire style espagnol
+  ══════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-photos">
+      <img src="grande table bois massif/IMG-20260307-WA0020.jpg" alt="Grande table de réfectoire style espagnol">
+    </div>
+    <div class="card-info">
+      <h2>Grande table de réfectoire style espagnol</h2>
+      <span class="badge">Bois massif · Style espagnol</span>
+
+      <div>
+        <div class="section-label">Dimensions</div>
+        <div class="dimensions">
+          <div class="dim"><span class="val">200</span><span class="lbl">Longueur cm</span></div>
+          <div class="dim"><span class="val">84</span><span class="lbl">Largeur cm</span></div>
+          <div class="dim"><span class="val">73</span><span class="lbl">Hauteur cm</span></div>
+        </div>
+      </div>
+
+      <div class="description">
+        <div class="section-label">Caractéristiques</div>
+        <ul>
+          <li>Bois massif (probablement chêne ou noyer)</li>
+          <li>Plateau d'un seul tenant, finition cirée</li>
+          <li>Pieds en lyre sculptés, caractéristiques du style espagnol</li>
+          <li>Barreaux de renfort en fer forgé</li>
+          <li>Légère patine — très bon état général</li>
+          <li>Pièce très lourde</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       MEUBLE 2 — Table guéridon circulaire
+  ══════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-photos">
+      <img src="table ronde bois/table ronde bois.jpg" alt="Table guéridon circulaire">
+    </div>
+    <div class="card-info">
+      <h2>Table guéridon circulaire</h2>
+      <span class="badge">Antiquité · Style Louis-Philippe</span>
+
+      <div>
+        <div class="section-label">Dimensions</div>
+        <div class="dimensions">
+          <div class="dim"><span class="val">90</span><span class="lbl">Diamètre cm</span></div>
+          <div class="dim"><span class="val">73</span><span class="lbl">Hauteur cm</span></div>
+        </div>
+      </div>
+
+      <div class="description">
+        <div class="section-label">Caractéristiques</div>
+        <ul>
+          <li>Bois massif — probablement noyer ou merisier</li>
+          <li>Plateau circulaire</li>
+          <li>Pied central en colonne tournée</li>
+          <li>Base trépied à pieds galbés</li>
+          <li>Bel état d'usage — quelques marques de vie sur le plateau</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       MEUBLE 3 — Commode sauteuse Louis XV
+  ══════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-photos">
+      <img src="Commode sauteuse à trois tiroirs/commode sauteuse.jpg" alt="Commode sauteuse Louis XV 3 tiroirs">
+    </div>
+    <div class="card-info">
+      <h2>Commode sauteuse trois tiroirs style Louis XV</h2>
+      <span class="badge">Antiquité · Style Louis XV</span>
+
+      <div>
+        <div class="section-label">Dimensions</div>
+        <div class="dimensions">
+          <div class="dim"><span class="val">110</span><span class="lbl">Largeur cm</span></div>
+          <div class="dim"><span class="val">85</span><span class="lbl">Hauteur cm</span></div>
+          <div class="dim"><span class="val">54</span><span class="lbl">Profondeur cm</span></div>
+        </div>
+      </div>
+
+      <div class="description">
+        <div class="section-label">Caractéristiques</div>
+        <ul>
+          <li>Bois massif et placage — probablement merisier ou noyer</li>
+          <li>Façade bombée (galbe caractéristique du style Louis XV)</li>
+          <li>Trois tiroirs avec poignées en bronze ciselé</li>
+          <li>Panneaux latéraux sculptés</li>
+          <li>Très bon état de conservation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       MEUBLE 4 — Table formica marron
+  ══════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-photos">
+      <img src="table fornica marron/IMG-20260307-WA0019.jpg" alt="Table formica marron style moderniste">
+    </div>
+    <div class="card-info">
+      <h2>Table style minimaliste / moderniste</h2>
+      <span class="badge">Années 60–70 · Mid-Century</span>
+
+      <div>
+        <div class="section-label">Dimensions</div>
+        <div class="dimensions">
+          <div class="dim"><span class="val">140</span><span class="lbl">Longueur cm</span></div>
+          <div class="dim"><span class="val">90</span><span class="lbl">Largeur cm</span></div>
+          <div class="dim"><span class="val">73</span><span class="lbl">Hauteur cm</span></div>
+        </div>
+      </div>
+
+      <div class="description">
+        <div class="section-label">Caractéristiques</div>
+        <ul>
+          <li>Pieds en métal chromé</li>
+          <li>Lignes épurées, style bureau ou salle à manger</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       OBJET 5 — Ampli-tuner Sansui 800 + enceintes AR-2x
+  ══════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-photos">
+      <img src="Ampli sansui 800 + enceintes AR-2x/gfhf.jpg" alt="Ampli-tuner Sansui Solid State 800 — face avant">
+      <img src="Ampli sansui 800 + enceintes AR-2x/20260316_153112.jpg" alt="Sansui 800 posé sur les enceintes Acoustic Research AR-2x">
+    </div>
+    <div class="card-info">
+      <h2>Ampli-tuner Sansui 800 + enceintes AR-2x</h2>
+      <span class="badge">Années 60–70 · HiFi Vintage · Solid State</span>
+
+      <div class="description">
+        <div class="section-label">Caractéristiques</div>
+        <ul>
+          <li>Ampli-tuner intégré Sansui Solid State 800 — FM/AM, entrées phono, aux</li>
+          <li>Façade argent brossé, cadran FM rétroéclairé, multiples boutons et potentiomètres d'époque</li>
+          <li>Paire d'enceintes Acoustic Research AR-2x — caisson bois, bon son</li>
+          <li>Enceintes en bon état général</li>
+          <li>Canal gauche défaillant sur certaines sorties — léger travail de remise en état à prévoir</li>
+          <li>Vendu en lot (ampli + 2 enceintes)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       MEUBLE 6 — Bibliothèque murale EFA
+  ══════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-photos-3">
+      <img class="main-photo" src="bibliothèque murale/bibliothèque murale 1.jpg" alt="Bibliothèque EFA — vue générale">
+      <div class="thumb-row">
+        <img src="bibliothèque murale/plan front.png" alt="Bibliothèque EFA — plan de face">
+        <img src="bibliothèque murale/plan diago.png" alt="Bibliothèque EFA — plan en diagonale">
+      </div>
+    </div>
+    <div class="card-info">
+      <h2>Bibliothèque murale EFA — Georges Frydman</h2>
+      <span class="badge">Années 60–70 · EFA · Design Georges Frydman</span>
+
+      <div>
+        <div class="section-label">Dimensions</div>
+        <div class="dimensions">
+          <div class="dim"><span class="val">270</span><span class="lbl">Largeur cm</span></div>
+          <div class="dim"><span class="val">175</span><span class="lbl">Hauteur cm</span></div>
+          <div class="dim"><span class="val">43</span><span class="lbl">Profondeur cm</span></div>
+        </div>
+      </div>
+
+      <div class="description">
+        <div class="section-label">Caractéristiques</div>
+        <ul>
+          <li>Placage teck ou acajou</li>
+          <li>Structure en métal</li>
+          <li>Portes coulissantes en verre</li>
+          <li>Système d'éclairage intégré</li>
+          <li>Niche dédiée chaîne hi-fi</li>
+          <li>Tiroirs rangement documents / vinyles</li>
+          <li>Bureau abattant</li>
+        </ul>
+      </div>
+
+      <div class="note">
+        Éditée par EFA (Édition Française d'Ameublement), conçue par Georges Frydman — designer français emblématique du mobilier modulaire des années 1960–70.
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       OBJET 7 — Vase Satsuma Kinkozan
+  ══════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-photos-3">
+      <img class="main-photo" src="Vase Satsuma/satsuma 1.jpg" alt="Vase Satsuma Kinkozan - vue de face">
+      <div class="thumb-row">
+        <img src="Vase Satsuma/satsuma 2.jpg" alt="Vase Satsuma - vue de côté">
+        <img src="Vase Satsuma/satsuma 3.jpg" alt="Vase Satsuma - vue du dessus, pied hexagonal">
+      </div>
+    </div>
+    <div class="card-info">
+      <h2>Vase Satsuma « Aux mille visages »</h2>
+      <span class="badge">Japon · Époque Taishō · 1910–1930</span>
+
+      <div>
+        <div class="section-label">Dimensions</div>
+        <div class="dimensions">
+          <div class="dim"><span class="val">~43</span><span class="lbl">Hauteur cm</span></div>
+        </div>
+      </div>
+
+      <div class="description">
+        <div class="section-label">Caractéristiques</div>
+        <ul>
+          <li>Faïence Satsuma à fond noir et or</li>
+          <li>Décor <em>Rakan</em> (figures bouddhiques) dit « aux mille visages »</li>
+          <li>Pied et épaule à section hexagonale</li>
+          <li>Émaux polychromes rehaussés d'or</li>
+          <li>Grande taille</li>
+          <li>Atelier <strong>Kinkozan</strong>, Kyoto — l'un des plus réputés de l'export Satsuma</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       MEUBLE 8 — Desserte chambre
+  ══════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-photos">
+      <img src="desserte chambre/IMG-20260307-WA0006.jpg" alt="Desserte console bleu nuit" style="height: 315px;">
+      <img src="desserte chambre/20260314_184018.jpg" alt="Petite table assortie — vue 2" style="height: 105px;">
+    </div>
+    <div class="card-info">
+      <h2>Desserte / console + 2 petites tables</h2>
+      <span class="badge">Minimaliste</span>
+
+      <div>
+        <div class="section-label">Dimensions (desserte / console)</div>
+        <div class="dimensions">
+          <div class="dim"><span class="val">140</span><span class="lbl">Largeur cm</span></div>
+          <div class="dim"><span class="val">80</span><span class="lbl">Hauteur cm</span></div>
+          <div class="dim"><span class="val">40</span><span class="lbl">Profondeur cm</span></div>
+        </div>
+      </div>
+
+      <div class="description">
+        <div class="section-label">Caractéristiques</div>
+        <ul>
+          <li>Laqué bleu nuit / bleu pétrole</li>
+          <li>Lignes épurées, plateau fin</li>
+          <li>4 pieds carrés massifs</li>
+          <li>Vendu avec 2 petites tables assorties</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       MEUBLE 9 — Fauteuil électrique
+  ══════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-photos">
+      <img src="fauteuil électrique/fauteuil électrique.jpg" alt="Fauteuil électrique">
+    </div>
+    <div class="card-info">
+      <h2>Fauteuil électrique</h2>
+      <span class="badge good">État quasi-neuf</span>
+
+      <div>
+        <div class="section-label">Dimensions</div>
+        <div class="dimensions">
+          <div class="dim"><span class="val">103</span><span class="lbl">Largeur cm</span></div>
+          <div class="dim"><span class="val">97</span><span class="lbl">Hauteur cm</span></div>
+          <div class="dim"><span class="val">92</span><span class="lbl">Profondeur cm</span></div>
+        </div>
+      </div>
+
+      <div class="description">
+        <div class="section-label">Caractéristiques</div>
+        <ul>
+          <li>Commande électrique</li>
+          <li>Nombreuses positions de confort</li>
+          <li>Revêtement tissu gris clair</li>
+          <li>Très confortable</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       OBJET 10 — Tapis caucasien
+  ══════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-photos">
+      <img src="tapis caucasien/20260321_173254.jpg" alt="Tapis caucasien — fond rouge, motifs géométriques bleus" style="height: 160px;">
+    </div>
+    <div class="card-info">
+      <h2>Tapis caucasien</h2>
+      <span class="badge">Artisanat caucasien · Laine</span>
+
+      <div class="description">
+        <div class="section-label">Caractéristiques</div>
+        <ul>
+          <li>Tapis en laine tissée main</li>
+          <li>Style caucasien / Kazak — fond rouge, médaillon central géométrique</li>
+          <li>Motifs géométriques traditionnels bleus et crème</li>
+          <li>Franges aux extrémités</li>
+          <li>Bon état général — légère usure sur un bord</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       OBJET 11 — Lampe Airone — Hans Von Klier
+  ══════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-photos">
+      <img src="Lampe Airone Pollux Hans Von Klier/IMG-20260315-WA0000.jpg" alt="Lampe Airone — Hans Von Klier pour Pollux">
+    </div>
+    <div class="card-info">
+      <h2>Lampe de bureau Airone — Hans Von Klier</h2>
+      <span class="badge">1982 · Skipper / Pollux · Design Italien</span>
+
+      <div class="description">
+        <div class="section-label">Caractéristiques</div>
+        <ul>
+          <li>Éditée par Skipper &amp; Pollux, Italie, 1982</li>
+          <li>Base hémisphérique noire laquée</li>
+          <li>Long bras orientable en acier laqué noir mat</li>
+          <li>Tête articulable avec éclairage intégré</li>
+          <li>Design italien minimaliste emblématique des années 80</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       MEUBLE 12 — Lit Mérinos
+  ══════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-photos">
+      <img src="Lit mérinos/IMG-20260307-WA0017.jpg" alt="Lit Mérinos - vue ensemble">
+      <img src="Lit mérinos/IMG-20260307-WA0018.jpg" alt="Lit Mérinos - étiquette">
+    </div>
+    <div class="card-info">
+      <h2>Lit Mérinos — Matelas capitonné + sommier tapissier</h2>
+      <span class="badge good">Bon état</span>
+
+      <div>
+        <div class="section-label">Dimensions</div>
+        <div class="dimensions">
+          <div class="dim"><span class="val">160</span><span class="lbl">Largeur cm</span></div>
+          <div class="dim"><span class="val">200</span><span class="lbl">Longueur cm</span></div>
+        </div>
+      </div>
+
+      <div class="description">
+        <div class="section-label">Caractéristiques</div>
+        <ul>
+          <li>Marque <strong>Mérinos</strong></li>
+          <li>Queen size (160 × 200 cm)</li>
+          <li>Matelas capitonné + sommier tapissier sur pieds</li>
+          <li>Bon état général</li>
+          <li>Légère tache d'environ 10 cm sur un côté</li>
+          <li>Prix neuf : ~1 400 €</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Vente de particulier — Montpellier, mars 2026
+</footer>
+
+<div id="lightbox">
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+  const lightbox = document.getElementById('lightbox');
+  const lbImg    = document.getElementById('lightbox-img');
+
+  document.querySelectorAll('.card-photos img, .card-photos-3 img').forEach(img => {
+    img.addEventListener('click', () => {
+      lbImg.src = img.src;
+      lbImg.alt = img.alt;
+      lightbox.classList.add('open');
+    });
+  });
+
+  lightbox.addEventListener('click', () => lightbox.classList.remove('open'));
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') lightbox.classList.remove('open');
+  });
+</script>
+
+</body>
+</html>
